@@ -1,6 +1,6 @@
 name: nixi_markdown
 description: Markdown for nixi package.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/MuhammedKpln/nixi-markdown
 
 environment:

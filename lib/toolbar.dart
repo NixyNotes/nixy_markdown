@@ -4,10 +4,18 @@ class NixiMarkdownToolbarTools {
   NixiMarkdownToolbarTools(this.textController);
   final TextEditingController textController;
 
-  void bold() => _wrap(left: '**');
-  void italic() => _wrap(left: '*');
-  void strikethrough() => _wrap(left: '~~');
-  void mathText() => _wrap(left: '\$');
+  void checkBoxList() => _wrap(left: "- [ ] ");
+  void list() => _wrap(left: "- ");
+  void h1() => _wrap(left: '# ');
+  void h2() => _wrap(left: '## ');
+  void h3() => _wrap(left: '### ');
+  void h4() => _wrap(left: '#### ');
+  void h5() => _wrap(left: '##### ');
+  void h6() => _wrap(left: '###### ');
+  void bold() => _wrap(left: '**', right: "**");
+  void italic() => _wrap(left: '*', right: "*");
+  void strikethrough() => _wrap(left: '~~', right: "~~");
+  void mathText() => _wrap(left: '\$', right: '\$');
   void mathEnvironment(String environment) => _wrap(
         left: '\$\$\\begin{$environment}\n',
         right: '\\end{$environment}\$\$',
@@ -17,7 +25,6 @@ class NixiMarkdownToolbarTools {
     required String left,
     String? right,
   }) {
-    right ??= left;
     final sel = textController.selection;
     final text = textController.text;
 
@@ -25,12 +32,14 @@ class NixiMarkdownToolbarTools {
       sel.textBefore(text),
       left,
       sel.textInside(text),
-      right,
-      sel.textAfter(text)
-    ].join();
+    ];
+
+    if (right != null) {
+      output.addAll([right, sel.textAfter(text)]);
+    }
 
     textController.value = TextEditingValue(
-      text: output,
+      text: output.join(),
       selection: sel.copyWith(
         baseOffset: sel.baseOffset + left.length,
         extentOffset: sel.extentOffset + left.length,
