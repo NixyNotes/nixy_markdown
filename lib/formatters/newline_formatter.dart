@@ -6,6 +6,22 @@ class NewlineFormatter extends TextInputFormatter {
   static final periodCharcode = '.'.codeUnitAt(0);
   static bool isSpace(int code) => code == spaceCharcode;
 
+  String _getPreviousLine(String text, int selectionStart) {
+    final textLines = text.split('\n');
+    final currentLine = _getLineNumber(text, selectionStart);
+
+    if (currentLine > 0 && currentLine <= textLines.length) {
+      return textLines[currentLine - 1];
+    }
+
+    return '';
+  }
+
+  int _getLineNumber(String text, int selectionStart) {
+    final linesBeforeSelection = text.substring(0, selectionStart).split('\n');
+    return linesBeforeSelection.length;
+  }
+
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
@@ -15,12 +31,14 @@ class NewlineFormatter extends TextInputFormatter {
         (last = lastCharacter(newValue)) != null &&
         newlinePattern.contains(last!)) {
       // Trim from right side and then split newline, get the latest line.
-      String prevLine = newValue.text.trimRight().split("\n").last;
+      final selectionStart = newValue.selection.start;
+      final prevLine = _getPreviousLine(newValue.text, selectionStart - 1);
       final length = prevLine.runes.takeWhile(isSpace).length;
       final indent = "".padLeft(length);
 
       // If line includes any header catch it.
       String? header = bulletListHeader(prevLine, length);
+
       String before = newValue.selection.textBefore(newValue.text);
       int removedLength = 0;
 
@@ -30,8 +48,6 @@ class NewlineFormatter extends TextInputFormatter {
         final prev = lineTrimmed(prevLine, length);
 
         if (isEmptyHeader(prev)) {
-          header = "";
-
           removedLength = prev.length + 1;
           before =
               '${before.substring(0, before.length - removedLength - 1)}\n\n';
@@ -45,14 +61,14 @@ class NewlineFormatter extends TextInputFormatter {
         newValue.selection.textInside(newValue.text),
         newValue.selection.textAfter(newValue.text)
       ].join();
-
       return newValue.copyWith(
         text: value,
         selection: TextSelection.collapsed(
-            offset: newValue.selection.baseOffset +
-                length +
-                header.length -
-                removedLength),
+          offset: newValue.selection.baseOffset +
+              length +
+              header.length -
+              removedLength,
+        ),
       );
     }
 
