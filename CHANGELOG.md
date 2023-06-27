@@ -1,3 +1,5 @@
+# 0.1.3
+- bump: nixy_markdown_controller
 # 0.1.2
 - added nixy_markdown_controller as dependency
 - ignored .failed_tracker

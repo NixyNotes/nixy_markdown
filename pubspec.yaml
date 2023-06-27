@@ -1,12 +1,12 @@
 name: nixy_markdown
-version: 0.1.2
+version: 0.1.3
 homepage: https://github.com/MuhammedKpln/nixi-markdown
 description: Markdown for nixi package.
 environment: 
   sdk: '>=3.0.1 <4.0.0'
   flutter: '>=1.17.0'
 dependencies: 
-  nixy_markdown_controller: ^0.1.0
+  nixy_markdown_controller: ^0.1.2
   flutter: 
     sdk: flutter
 dev_dependencies: 
