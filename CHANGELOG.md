@@ -1,3 +1,6 @@
+# 0.1.4
+- feat: bump controller, add textafter
+
 # 0.1.3
 - bump: nixy_markdown_controller
 # 0.1.2
