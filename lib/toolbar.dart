@@ -36,6 +36,8 @@ class NixiMarkdownToolbarTools {
 
     if (right != null) {
       output.addAll([right, sel.textAfter(text)]);
+    } else {
+      output.add(sel.textAfter(text));
     }
 
     textController.value = TextEditingValue(
